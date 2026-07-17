@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Turismo San Roque de Cumbaza</title>
+    <!-- Tailwind CSS desde CDN para diseño moderno estilo App -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Lucide Icons para iconos limpios y minimalistas -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body class="bg-slate-50 text-slate-800 font-sans antialiased pb-28 relative">
+
+    <!-- CABECERA INSTITUCIONAL -->
+    <header class="bg-gradient-to-r from-emerald-600 to-teal-700 text-white px-5 pt-8 pb-6 rounded-b-3xl shadow-md">
+        <div class="flex justify-between items-center mb-4">
+            <div>
+                <span class="text-xs font-semibold uppercase tracking-wider text-emerald-100">Municipalidad de</span>
+                <h1 class="text-2xl font-bold tracking-tight">San Roque de Cumbaza</h1>
+            </div>
+            <div class="bg-white/20 p-2 rounded-full backdrop-blur-sm">
+                <i data-lucide="palmtree" class="w-6 h-6 text-white"></i>
+            </div>
+        </div>
+        <p class="text-emerald-50 text-sm">Explora los atractivos turísticos más hermosos cerca al Río Cumbaza.</p>
+    </header>
+
+    
+
+    <!-- BUSCADOR INTERACTIVO -->
+    <div class="px-4 mt-4">
+        <div class="bg-white p-2 rounded-xl shadow-md flex items-center border border-slate-100">
+            <i data-lucide="search" class="w-5 h-5 text-slate-400 mx-2"></i>
+            <input type="text" id="buscador" placeholder="Buscar pozas o paradas de la ruta..." class="w-full bg-transparent focus:outline-none text-sm py-2" />
+        </div>
+    </div>
+
+    <!-- LISTADO DE DESTINOS EN ORDEN DE RUTA -->
+    <main class="mt-6 px-4 space-y-4">
+        <h2 class="text-sm font-bold text-slate-500 uppercase tracking-wider">Puntos de Interés en el Circuito</h2>
+        <!-- Contenedor dinámico de tarjetas -->
+        <div id="lugares-container" class="space-y-4"></div>
+    </main>
+
+    <!-- ==================== MODALES INTERACTIVOS ==================== -->
+    
+    <!-- 1. MODAL DINÁMICO PARA MAPAS DE LUGARES -->
+    <div id="modal-mapa" class="fixed inset-0 bg-slate-900/70 backdrop-blur-sm flex items-center justify-center p-4 z-[100] hidden" onclick="cerrarModalMapa()">
+        <div class="bg-white w-full max-w-md rounded-2xl overflow-hidden shadow-2xl border border-slate-100 transform scale-95 transition-all" onclick="event.stopPropagation()">
+            <div class="bg-slate-900 text-white px-4 py-3 flex justify-between items-center">
+                <div class="flex items-center gap-2">
+                    <i data-lucide="map" class="w-4 h-4 text-emerald-400"></i>
+                    <span id="modal-titulo" class="text-xs font-bold tracking-wide uppercase">Ubicación</span>
+                </div>
+                <button onclick="cerrarModalMapa()" class="text-slate-400 hover:text-white p-1 rounded-lg bg-white/10">
+                    <i data-lucide="x" class="w-4 h-4"></i>
+                </button>
+            </div>
+            <div class="p-2 bg-slate-50">
+                <img id="modal-imagen" src="" alt="Mapa de ubicación" class="w-full h-auto rounded-xl shadow-inner border border-slate-200">
+            </div>
+            <div class="p-3 bg-white border-t border-slate-100 text-center">
+                <p id="modal-descripcion" class="text-[11px] text-slate-500"></p>
+            </div>
+        </div>
+    </div>
+
+    <!-- 2. MODAL DE CONTACTOS (¡NUEVO Y BONITO!) -->
+    <div id="modal-contactos" class="fixed inset-0 bg-slate-900/70 backdrop-blur-sm flex items-end justify-center z-[100] hidden" onclick="cerrarModalContactos()">
+        <div class="bg-white w-full max-w-md rounded-t-3xl p-6 shadow-2xl border-t border-slate-200 transform translate-y-0 transition-all space-y-4" onclick="event.stopPropagation()">
+            <div class="w-12 h-1.5 bg-slate-300 rounded-full mx-auto mb-2" onclick="cerrarModalContactos()"></div>
+            <div class="flex justify-between items-center">
+                <h3 class="text-lg font-bold text-slate-800 flex items-center gap-2">
+                    <i data-lucide="phone-call" class="text-emerald-600 w-5 h-5"></i> Directorio de Contactos
+                </h3>
+                <button onclick="cerrarModalContactos()" class="text-slate-400 bg-slate-100 p-1.5 rounded-full">
+                    <i data-lucide="x" class="w-4 h-4"></i>
+                </button>
+            </div>
+            <p class="text-slate-500 text-xs">Números telefónicos oficiales y de asistencia rápida en San Roque de Cumbaza.</p>
+            
+            <div class="space-y-2.5">
+                <a href="tel:+51957342934" class="flex items-center justify-between p-3 bg-slate-50 rounded-xl border border-slate-100 hover:bg-slate-100">
+                    <div class="flex items-center gap-3">
+                        <div class="bg-emerald-100 p-2 rounded-lg text-emerald-700"><i data-lucide="info" class="w-4 h-4"></i></div>
+                        <div>
+                            <p class="text-xs font-bold text-slate-700">Oficina de Turismo Municipal</p>
+                            <p class="text-[10px] text-slate-400">Atención e información de rutas</p>
+                        </div>
+                    </div>
+                    <i data-lucide="phone" class="w-4 h-4 text-emerald-600"></i>
+                </a>
+                <a href="tel:105" class="flex items-center justify-between p-3 bg-red-50/50 rounded-xl border border-red-100 hover:bg-red-50">
+                    <div class="flex items-center gap-3">
+                        <div class="bg-red-100 p-2 rounded-lg text-red-700"><i data-lucide="shield-alert" class="w-4 h-4"></i></div>
+                        <div>
+                            <p class="text-xs font-bold text-red-800">Seguridad Ciudadana / PNP</p>
+                            <p class="text-[10px] text-red-400">Emergencias las 24 horas</p>
+                        </div>
+                    </div>
+                    <i data-lucide="phone" class="w-4 h-4 text-red-600"></i>
+                </a>
+                <a href="tel:+51945123456" class="flex items-center justify-between p-3 bg-blue-50/50 rounded-xl border border-blue-100 hover:bg-blue-50">
+                    <div class="flex items-center gap-3">
+                        <div class="bg-blue-100 p-2 rounded-lg text-blue-700"><i data-lucide="heart-pulse" class="w-4 h-4"></i></div>
+                        <div>
+                            <p class="text-xs font-bold text-blue-800">Puesto de Salud San Roque</p>
+                            <p class="text-[10px] text-blue-400">Primeros auxilios y asistencia médica</p>
+                        </div>
+                    </div>
+                    <i data-lucide="phone" class="w-4 h-4 text-blue-600"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- BARRA DE NAVEGACIÓN INFERIOR ESTILO APP MÓVIL -->
+    <nav class="fixed bottom-0 left-0 right-0 bg-white border-t border-slate-200 px-6 py-2 flex justify-around items-center shadow-2xl z-50">
+        <button onclick="window.scrollTo({top: 0, behavior: 'smooth'})" class="flex flex-col items-center justify-center text-emerald-600">
+            <i data-lucide="map" class="w-5 h-5"></i>
+            <span class="text-[10px] mt-0.5 font-semibold">Ruta</span>
+        </button>
+        <button class="flex flex-col items-center justify-center text-slate-400 hover:text-slate-600">
+            <i data-lucide="qr-code" class="w-5 h-5"></i>
+            <span class="text-[10px] mt-0.5">Escanear QR</span>
+        </button>
+        <button onclick="abrirModalContactos()" class="flex flex-col items-center justify-center text-slate-400 hover:text-emerald-600 transition-colors">
+            <i data-lucide="phone-call" class="w-5 h-5"></i>
+            <span class="text-[10px] mt-0.5 font-medium">Contactos</span>
+        </button>
+    </nav>
+
+    <script>
+        // Set de Datos expandido, cada uno con su mapa y descripción única para el modal
+        const lugaresTuristicos = [
+            {
+                id: 1,
+                nombre: "Parada 1: La Isla (Playa del Amor)",
+                categoria: "Ríos y Pozas",
+                descripcion: "Punto de inicio en la ribera baja. Famoso sector rodeado de abundante vegetación donde el río Cumbaza forma playas de arena fina.",
+                tags: ["Inicio", "Río Cumbaza"],
+                contactoGuia: "+51957342934",
+                imagen: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTeY3Xx5Bq9K-chJRDQ4T9156kndAVgKw2lZRle4aWl65LkBzPDpknLR77E&s=10",
+                // Datos del modal específico
+                mapaTitulo: "Mapa: Playa del Amor",
+                mapaUrl: "https://cdn.discordapp.com/attachments/1113947471649128522/1263223014902141019/mapa_isla.png", 
+                mapaLocal: "mapa-isla.png",
+                mapaDesc: "Camino directo desde la Loza Deportiva Los Ángeles cruzando el puente peatonal."
+            },
+            {
+                id: 2,
+                nombre: "Parada 2: Recreo Ecológico La Monzona",
+                categoria: "Recreos",
+                descripcion: "Siguiendo el sendero azul. Paraje natural único a orillas del río Cumbaza con áreas frescas de descanso, comida típica y acceso al río.",
+                tags: ["Punto Medio", "Almuerzo"],
+                contactoGuia: "+51957342934",
+                imagen: "https://tarapoto.com/wp-content/uploads/2020/06/monzona.jpg",
+                // Datos del modal específico
+                mapaTitulo: "Mapa: Recreo La Monzona",
+                mapaUrl: "https://images.unsplash.com/photo-1524661135-423995f22d0b?w=500&auto=format&fit=crop&q=60", // Ilustrativo para W3S
+                mapaLocal: "mapa-monzona.png",
+                mapaDesc: "Ubicado a unos 350 metros aguas arriba siguiendo el sendero marcado del Río Cumbaza."
+            },
+            {
+                id: 3,
+                nombre: "Parada 3: Curva Bella (Mishquiyacu)",
+                categoria: "Cascadas",
+                descripcion: "Fin de la ruta hacia arriba. Hermosa caída de agua y poza natural con corrientes mansas perfectas para refrescarse luego de la caminata.",
+                tags: ["Fin de Ruta", "Cascada"],
+                contactoGuia: "+51957342934",
+                imagen: "https://tarapoto.com/wp-content/uploads/2020/06/cascada-miskiyacu.jpg",
+                // Datos del modal específico
+                mapaTitulo: "Mapa: Cascada Mishquiyacu",
+                mapaUrl: "https://images.unsplash.com/photo-1548345680-f5475ea5df84?w=500&auto=format&fit=crop&q=60", // Ilustrativo para W3S
+                mapaLocal: "mapa-mishquiyacu.png",
+                mapaDesc: "Subida final señalizada por el cañón rocoso. Se recomienda calzado antideslizante."
+            }
+        ];
+
+        // Controladores del Modal de Mapas Dinámicos
+        function abrirModalMapa(id) {
+            const lugar = lugaresTuristicos.find(l => l.id === id);
+            if(!lugar) return;
+
+            document.getElementById('modal-titulo').innerText = lugar.mapaTitulo;
+            document.getElementById('modal-descripcion').innerText = lugar.mapaDesc;
+            
+            const imgElement = document.getElementById('modal-imagen');
+            imgElement.src = lugar.mapaUrl; 
+            // Manejador por si estás localmente en XAMPP sin internet, use el archivo de tu carpeta
+            imgElement.onerror = function() {
+                this.src = lugar.mapaLocal;
+            };
+
+            document.getElementById('modal-mapa').classList.remove('hidden');
+            document.getElementById('modal-mapa').firstElementChild.classList.remove('scale-95');
+            document.getElementById('modal-mapa').firstElementChild.classList.add('scale-100');
+        }
+
+        function cerrarModalMapa() {
+            document.getElementById('modal-mapa').classList.add('hidden');
+        }
+
+        // Controladores del Modal de Contactos
+        function abrirModalContactos() {
+            document.getElementById('modal-contactos').classList.remove('hidden');
+        }
+        function cerrarModalContactos() {
+            document.getElementById('modal-contactos').classList.add('hidden');
+        }
+
+        // Renderizado del catálogo de paradas
+        function cargarLugares(filtrados = lugaresTuristicos) {
+            const container = document.getElementById('lugares-container');
+            container.innerHTML = ''; 
+
+            if(filtrados.length === 0) {
+                container.innerHTML = `<div class="text-center py-8 text-slate-400 text-sm">No se encontraron paradas.</div>`;
+                return;
+            }
+
+            filtrados.forEach(lugar => {
+                const tagsHTML = lugar.tags.map(tag => 
+                    `<span class="bg-emerald-50 text-emerald-700 text-[10px] px-2 py-0.5 rounded font-medium border border-emerald-100">${tag}</span>`
+                ).join('');
+
+                const tarjeta = `
+                    <div class="bg-white rounded-2xl overflow-hidden shadow-sm border border-slate-100">
+                        <div class="h-40 w-full bg-slate-200 relative">
+                            <img src="${lugar.imagen}" alt="${lugar.nombre}" class="w-full h-full object-cover">
+                            <span class="absolute top-3 left-3 bg-emerald-600 text-white text-[10px] font-bold px-2.5 py-1 rounded-full uppercase">
+                                ${lugar.categoria}
+                            </span>
+                        </div>
+                        <div class="p-4">
+                            <h3 class="text-sm font-bold text-slate-800 mb-1">${lugar.nombre}</h3>
+                            <p class="text-slate-500 text-xs line-clamp-2 mb-3">${lugar.descripcion}</p>
+                            <div class="flex flex-wrap gap-1 mb-3">${tagsHTML}</div>
+                            <div class="grid grid-cols-2 gap-2 pt-2 border-t border-slate-100">
+                                <button onclick="abrirModalMapa(${lugar.id})" 
+                                   class="flex items-center justify-center gap-1.5 bg-slate-900 text-white text-xs font-bold py-2 rounded-xl w-full active:scale-95 transition-transform">
+                                    <i data-lucide="map" class="w-3.5 h-3.5 text-emerald-400"></i> Ver Ubicación
+                                </button>
+                                <a href="https://wa.me/${lugar.contactoGuia.replace('+', '')}" 
+                                   class="flex items-center justify-center gap-1.5 bg-emerald-600 text-white text-xs font-bold py-2 rounded-xl active:scale-95 transition-transform">
+                                    <i data-lucide="phone" class="w-3.5 h-3.5"></i> Guiado
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                container.innerHTML += tarjeta;
+            });
+            lucide.createIcons();
+        }
+
+        // Escucha en tiempo real del buscador
+        document.getElementById('buscador').addEventListener('input', (e) => {
+            const texto = e.target.value.toLowerCase();
+            const filtrados = lugaresTuristicos.filter(lugar => 
+                lugar.nombre.toLowerCase().includes(texto) || lugar.descripcion.toLowerCase().includes(texto)
+            );
+            cargarLugares(filtrados);
+        });
+
+        window.onload = () => { cargarLugares(); };
+    </script>
+</body>
+</html>
